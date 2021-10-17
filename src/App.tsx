@@ -1,12 +1,12 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
-const ImageList = lazy(() => import('./ImageList'));
-const ImageEditor = lazy(() => import('./ImageEditor'));
+const ImageList = lazy(() => import("./ImageList"));
+const ImageEditor = lazy(() => import("./ImageEditor"));
+
+const queryClient = new QueryClient();
 
 const FallBack = () => <span>Loading...</span>;
 
@@ -15,13 +15,19 @@ const NotFound = () => <span>Not found</span>;
 function App() {
   return (
     <Suspense fallback={<FallBack />}>
-    <Router>
-      <Switch>
-        <Route path="/" exact component={ImageList} />
-        <Route path="/edit/:imageId/:height/:width?" component={ImageEditor} />
-        <Route path="*" component={NotFound} />
-      </Switch>
-    </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Switch>
+            <Route path="/" exact component={ImageList} />
+            <Route
+              path="/edit/:imageId/:height/:width?"
+              component={ImageEditor}
+            />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Router>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
     </Suspense>
   );
 }
