@@ -3,6 +3,8 @@ import { lazy, Suspense } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
+import { ImageEditorPath } from "./consts";
+
 const ImageList = lazy(() => import("./ImageList"));
 const ImageEditor = lazy(() => import("./ImageEditor"));
 
@@ -19,10 +21,7 @@ function App() {
         <Router>
           <Switch>
             <Route path="/" exact component={ImageList} />
-            <Route
-              path="/edit/:imageId/:height/:width?"
-              component={ImageEditor}
-            />
+            <Route path={ImageEditorPath} component={ImageEditor} />
             <Route path="*" component={NotFound} />
           </Switch>
         </Router>

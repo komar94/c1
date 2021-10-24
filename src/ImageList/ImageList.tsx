@@ -2,20 +2,19 @@ import Paginator from "./Paginator";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import useGetImages from "./hooks/useGetImages";
-import usePagination from "./hooks/usePagination";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../ErrorFallback";
 
 const ImageList: FC = () => {
-  const { nextPage, prevPage, page } = usePagination(1);
-  const { data, isError, isLoading } = useGetImages(page);
+  const { data, status, error, next, previous, hasNext, hasPrevious } =
+    useGetImages();
 
-  if (isLoading) {
+  if (status === "loading") {
     return <p role="progressbar">Loading...</p>;
   }
 
-  if (isError) {
-    return (
-      <p>Picture service is currently unavailable. Please try again later.</p>
-    );
+  if (status === "error") {
+    throw error;
   }
 
   return (
@@ -33,7 +32,12 @@ const ImageList: FC = () => {
           />
         ))}
       </ul>
-      <Paginator onNextClicked={nextPage} onPreviousClicked={prevPage} />
+      <Paginator
+        onNextClicked={next}
+        onPreviousClicked={previous}
+        hasNext={hasNext}
+        hasPrevious={hasPrevious}
+      />
     </>
   );
 };
@@ -53,8 +57,8 @@ const ImageItem: FC<{
     <li className="md:w-full lg:w-1/3 px-4 mb-8">
       <Link to={`/edit/${id}/${height}/${width}`}>
         <img
-          width="200"
-          height="200"
+          width="367"
+          height="267"
           alt={`by ${author}`}
           src={createImageUrl(id)}
         />
@@ -64,4 +68,10 @@ const ImageItem: FC<{
   );
 };
 
-export default ImageList;
+const SafeImageList: FC = () => (
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ImageList />
+  </ErrorBoundary>
+);
+
+export default SafeImageList;

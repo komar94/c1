@@ -33,7 +33,13 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json(getData.slice(page * 2, page * 2 + 2))
+      ctx.json(getData.slice(page * 2, page * 2 + 2)),
+      ctx.set(
+        "link",
+        page === 0
+          ? `<https://picsum.photos/v2/list?page=2&limit=12>; rel="next"`
+          : `<https://picsum.photos/v2/list?page=1&limit=12>; rel="prev"`
+      )
     );
   }),
 ];

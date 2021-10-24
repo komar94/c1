@@ -1,4 +1,4 @@
-import { createRequest } from "../baseApi";
+import { createRequest, FetchResponse } from "../baseApi";
 
 export interface ImageModel {
   id: string;
@@ -9,6 +9,11 @@ export interface ImageModel {
   download_url: string;
 }
 
-export function getListOfImages(page: number = 1): Promise<ImageModel[]> {
-    return createRequest<ImageModel[]>(`https://picsum.photos/v2/list?page=${page}&limit=12`);
+export function getListOfImages(
+  page: number = 1,
+  size: number = 12
+): FetchResponse<ImageModel[]> {
+  return createRequest<ImageModel[]>(
+    `https://picsum.photos/v2/list?page=${page}&limit=${size}`
+  );
 }

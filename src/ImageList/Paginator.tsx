@@ -1,14 +1,23 @@
 import { FC } from "react";
-import usePagination from "./hooks/usePagination";
 
 const Paginator: FC<{
   onPreviousClicked: () => void;
   onNextClicked: () => void;
-}> = ({ onNextClicked, onPreviousClicked }) => {
+  hasNext: boolean;
+  hasPrevious: boolean;
+}> = ({ onNextClicked, onPreviousClicked, hasNext, hasPrevious }) => {
   return (
     <>
-      <button onClick={onPreviousClicked}>Previous</button>
-      <button onClick={onNextClicked}>Next</button>
+      <button
+        className="mr-2"
+        onClick={onPreviousClicked}
+        disabled={!hasPrevious}
+      >
+        Previous
+      </button>
+      <button className="mr-2" onClick={onNextClicked} disabled={!hasNext}>
+        Next
+      </button>
     </>
   );
 };

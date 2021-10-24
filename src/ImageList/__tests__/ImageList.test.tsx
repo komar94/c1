@@ -6,7 +6,6 @@ import {
 import userEvent from "@testing-library/user-event";
 import ImageList from "../ImageList";
 import { renderWithRouter } from "../../test-utils";
-import { act } from "react-dom/test-utils";
 
 // - As a user, I want to be able to search through the list of images.
 //     - Images list should be paginated.
@@ -38,8 +37,6 @@ describe("ImageList", () => {
       const nextPage = await screen.findByRole("button", { name: "Next" });
       userEvent.click(nextPage);
 
-      await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"));
-
       const pictures = await screen.findAllByRole("listitem");
 
       expect(pictures.length).toBe(1);
@@ -50,6 +47,22 @@ describe("ImageList", () => {
       userEvent.click(previous);
 
       expect(screen.queryByText("Ziga Ajdnik")).not.toBeInTheDocument();
+    });
+
+    it("When on second page next should be disabled", async () => {
+      renderWithRouter(<ImageList />);
+
+      let nextPage = await screen.findByRole("button", { name: "Next" });
+      userEvent.click(nextPage);
+
+      nextPage = await screen.findByRole("button", { name: "Next" });
+      expect(nextPage).toBeDisabled();
+    });
+
+    it("When on first page previous should be disabled", async () => {
+      renderWithRouter(<ImageList />);
+      const previous = await screen.findByRole("button", { name: "Previous" });
+      expect(previous).toBeDisabled();
     });
   });
 
