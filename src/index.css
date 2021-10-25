@@ -16,8 +16,14 @@ code {
     monospace;
 }
 
-@layer components {
+@layer base {
   button {
     @apply inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-nowrap bg-blue-600 border border-blue-700 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50;
+  }
+}
+
+@layer utilities {
+  .cursor-grab {
+    cursor: grab;
   }
 }

@@ -1,16 +1,18 @@
 import Paginator from "./Paginator";
 import { FC } from "react";
-import { Link } from "react-router-dom";
-import useGetImages from "./hooks/useGetImages";
+import { generatePath, Link } from "react-router-dom";
+import useGetImages from "../hooks/useGetImages";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../ErrorFallback";
+import Loader from "../shared/Loader";
+import { ImageEditorPath } from "../consts";
 
 const ImageList: FC = () => {
   const { data, status, error, next, previous, hasNext, hasPrevious } =
     useGetImages();
 
   if (status === "loading") {
-    return <p role="progressbar">Loading...</p>;
+    return <Loader />;
   }
 
   if (status === "error") {
@@ -19,8 +21,7 @@ const ImageList: FC = () => {
 
   return (
     <>
-      <div className="bg-gray-100 rounded-xl p-8">ImageList</div>
-      <ul>
+      <div role="listbox">
         {data?.map(({ id, author, download_url: url, width, height }) => (
           <ImageItem
             key={id}
@@ -31,7 +32,7 @@ const ImageList: FC = () => {
             height={height}
           />
         ))}
-      </ul>
+      </div>
       <Paginator
         onNextClicked={next}
         onPreviousClicked={previous}
@@ -54,8 +55,8 @@ const ImageItem: FC<{
   height: number;
 }> = ({ author, id, height, width }) => {
   return (
-    <li className="md:w-full lg:w-1/3 px-4 mb-8">
-      <Link to={`/edit/${id}/${height}/${width}`}>
+    <div role="listitem" className="inline-block md:w-full lg:w-1/3 px-4 mb-8">
+      <Link to={generatePath(ImageEditorPath, { id, width, height })}>
         <img
           width="367"
           height="267"
@@ -64,7 +65,7 @@ const ImageItem: FC<{
         />
       </Link>
       <div>{author}</div>
-    </li>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useQuery, UseQueryResult } from "react-query";
-import { getListOfImages, ImageModel } from "../../api/picsumApi";
+import { getListOfImages, ImageModel } from "../api/picsumApi";
 
 type UseGetImageResult = {
   hasNext: boolean;

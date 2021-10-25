@@ -17,3 +17,7 @@ export function getListOfImages(
     `https://picsum.photos/v2/list?page=${page}&limit=${size}`
   );
 }
+
+export function getImageInfo(id: string): FetchResponse<ImageModel> {
+  return createRequest<ImageModel>(`https://picsum.photos/id/${id}/info`);
+}
