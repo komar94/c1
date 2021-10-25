@@ -1,1 +1,1 @@
-export const ImageEditorPath = "/edit/:id/:width?/:height?";
+export const ImageEditorPath = "/edit/:id/:width/:height";

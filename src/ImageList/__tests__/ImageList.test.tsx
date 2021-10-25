@@ -72,6 +72,6 @@ describe("ImageList", () => {
     const picture = (await screen.findAllByRole("img"))[0];
     userEvent.click(picture);
 
-    expect(window.location.pathname).toBe("/edit/0/3744/5616");
+    expect(window.location.pathname).toBe("/edit/0/5616/3744");
   });
 });

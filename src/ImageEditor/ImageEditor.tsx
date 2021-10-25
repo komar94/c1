@@ -1,37 +1,12 @@
 import { useEffect, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useQuery } from "react-query";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 import ErrorFallback from "../ErrorFallback";
+import useImageData from "../hooks/useImageData";
 import Loader from "../shared/Loader";
+import { ImageEditorPathParams } from "../types";
 import Toolbar from "./Toolbar";
-
-interface ImageEditorPathParams {
-  id: string;
-  height: string;
-  width: string;
-}
-
-function useUrlQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
-function useImageUrl() {
-  const { height, id, width } = useParams<ImageEditorPathParams>();
-  const queryParams = useUrlQuery().toString();
-
-  const url = `https://picsum.photos/id/${id}/${width}/${height}?${queryParams}`;
-
-  return useQuery(["image-download", id, height, width, queryParams], () =>
-    fetch(url).then(async (x) => {
-      if (x.ok) {
-        return x.blob();
-      }
-
-      throw new Error(await x.text());
-    })
-  );
-}
 
 function saveImage(imageData: Blob, imageName: string) {
   var element = document.createElement("a");
@@ -41,13 +16,13 @@ function saveImage(imageData: Blob, imageName: string) {
 }
 
 const ImageEditor = () => {
-  const { data, status, error } = useImageUrl();
   const imageRef = useRef<HTMLImageElement>(null);
+
+  const { data, status, error } = useImageData();
   const { height, id, width } = useParams<ImageEditorPathParams>();
 
   useEffect(() => {
     if (data && imageRef.current) {
-      console.log("Changing picture");
       const imageUrl = window.URL.createObjectURL(data);
       imageRef.current.src = imageUrl;
       imageRef.current.onload = () => {

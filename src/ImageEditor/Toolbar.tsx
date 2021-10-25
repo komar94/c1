@@ -19,7 +19,6 @@ type Action =
 
 function toolbarReducer(state: ToolbarState, action: Action): ToolbarState {
   const aspectRatio = state.width / state.height;
-  console.log(action);
   switch (action.type) {
     case "blur": {
       return {
@@ -95,6 +94,7 @@ const Toolbar: FC<{
         <label>
           <span className="text-gray-700">Blur: </span>
           <Slider
+            name="blur"
             className="
                     mt-1
                     block
@@ -117,6 +117,7 @@ const Toolbar: FC<{
                     block
                   "
             type="checkbox"
+            name="grayscale"
             onChange={(e) =>
               dispatch({ type: "grayscale", value: e.target.checked })
             }
@@ -128,6 +129,7 @@ const Toolbar: FC<{
           <span className="text-gray-700">Width: </span>
           <input
             type="number"
+            name="width"
             className="w-full
                     rounded-md
                     border-gray-300
@@ -144,6 +146,7 @@ const Toolbar: FC<{
         <label className="block">
           <span className="text-gray-700">Height: </span>
           <input
+            name="height"
             type="number"
             className=" w-full
                     rounded-md
